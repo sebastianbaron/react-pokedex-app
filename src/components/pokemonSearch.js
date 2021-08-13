@@ -1,44 +1,61 @@
-import React, { useState } from 'react';
+import React from 'react';
 import P from "../api/pokeApi"
 import "../style/main.css"
 import capitalize from "../utils/capitalize"
 
-const PokemonSearch = () => {
+const PokemonSearch = (props) => {
 
-  let [pokemonSearchName, setPokemonSearchName] = useState("")
-  let [pokemonImage, setPokemonImage] = useState("")
-  let [pokemonName, setPokemonName] = useState("")
-  let [pokemonHp, setPokemonHp] = useState("")
-  let [pokemonAttack, setPokemonAttack] = useState("")
-  let [pokemonDefense, setPokemonDefense] = useState("")
-  let [pokemonSpeed, setPokemonSpeed] = useState("")
-  let [pokemonType, setPokemonType] = useState("")
-  let [pokemonSecondType, setPokemonSecondType] = useState("")
-   
+  let {
+    pokemonSearchName,
+    setPokemonSearchName,
+    pokemonImage,
+    setPokemonImage,
+    pokemonName,
+    setPokemonName,
+    pokemonHp,
+    setPokemonHp,
+    pokemonAttack,
+    setPokemonAttack,
+    pokemonDefense,
+    setPokemonDefense,
+    pokemonSpeed,
+    setPokemonSpeed,
+    pokemonType,
+    setPokemonType,
+    pokemonSecondType,
+    setPokemonSecondType,
+  } = props;
+
+  const setter = (id) => {
+    if(id !== pokemonSearchName){
+      P.getPokemonByName((id).toString().toLowerCase())
+      .then(function(response){
+        console.log(response)
+        setPokemonSearchName(id)
+        setPokemonImage(response.sprites.front_default)
+        setPokemonName(response.name)
+        setPokemonHp(response.stats[0].base_stat)
+        setPokemonAttack(response.stats[1].base_stat)
+        setPokemonDefense(response.stats[2].base_stat)
+        setPokemonSpeed(response.stats[5].base_stat)
+        setPokemonType(response.types[0].type.name)
+          if(response.types[1] !== undefined){
+            setPokemonSecondType(response.types[1].type.name)
+          }
+        })
+      .catch(function(error){
+        console.log(`There was an error:` , error)
+      })
+    }
+  }
 
   const inputHandler = (event) => {
     const input = document.getElementById("input")
       if(event.keyCode === 13){
-        if(input.value !== pokemonSearchName){
-          P.getPokemonByName((input.value).toString().toLowerCase())
-          .then(function(response){
-            console.log(response)
-            setPokemonSearchName(input.value)
-            setPokemonImage(response.sprites.front_default)
-            setPokemonName(response.name)
-            setPokemonHp(response.stats[0].base_stat)
-            setPokemonAttack(response.stats[1].base_stat)
-            setPokemonDefense(response.stats[2].base_stat)
-            setPokemonSpeed(response.stats[5].base_stat)
-            setPokemonType(response.types[0].type.name)
-              if(response.types[1] !== undefined){
-                setPokemonSecondType(response.types[1].type.name)
-              }
-            })
-          .catch(function(error){
-            console.log(`There was an error:` , error)
-          })
-        }
+        setter(input.value)
+      }else if(event.keyCode === undefined){
+        input.value = Math.floor(Math.random()*1118+1)
+        setter(input.value)
       }
    }    
 
@@ -46,7 +63,7 @@ const PokemonSearch = () => {
         <>        
         <div className="m-auto">
           <div>
-            <div className="relative mb-3"> <input id="input" type="text" onKeyDown={(event)=>inputHandler(event)} className="h-14 w-96 pr-8 pl-5 rounded z-0 focus:shadow focus:outline-none" placeholder="Search pokemon..." />
+            <div className="relative mb-3 shadow-md rounded-md"> <input id="input" type="text" onKeyDown={(event)=>inputHandler(event)} className="h-14 w-96 pr-8 pl-5 rounded z-0 focus:shadow focus:outline-none" placeholder="Search pokemon..." />
               <div className="absolute top-4 right-3"> <i className="fa fa-search text-gray-400 z-20 hover:text-gray-500"></i> </div>
             </div> 
             <div className="flex flex-col bg-gray-200 max-w-screen shadow-md py-8 px-10 md:px-8 rounded-md">
@@ -71,6 +88,7 @@ const PokemonSearch = () => {
             </div>
             </div>
             </div>
+            <button className="mt-3 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" id="random" onClick={(event)=>inputHandler(event)}>Random Pokemon</button>
         </div>
 
         </>
