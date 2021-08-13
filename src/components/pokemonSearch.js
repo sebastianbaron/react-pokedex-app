@@ -3,42 +3,44 @@ import P from "../api/pokeApi"
 import "../style/main.css"
 import capitalize from "../utils/capitalize"
 
-const PokemonSearch = (props) => {
+const PokemonSearch = () => {
 
-    let { pokemonSearchName, setPokemonSearchName } = props
-    let [pokemonImage, setPokemonImage] = useState("")
-    let [pokemonName, setPokemonName] = useState("")
-    let [pokemonHp, setPokemonHp] = useState("")
-    let [pokemonAttack, setPokemonAttack] = useState("")
-    let [pokemonDefense, setPokemonDefense] = useState("")
-    let [pokemonSpeed, setPokemonSpeed] = useState("")
-    let [pokemonType, setPokemonType] = useState("")
-    let [pokemonSecondType, setPokemonSecondType] = useState("")
+  let [pokemonSearchName, setPokemonSearchName] = useState("")
+  let [pokemonImage, setPokemonImage] = useState("")
+  let [pokemonName, setPokemonName] = useState("")
+  let [pokemonHp, setPokemonHp] = useState("")
+  let [pokemonAttack, setPokemonAttack] = useState("")
+  let [pokemonDefense, setPokemonDefense] = useState("")
+  let [pokemonSpeed, setPokemonSpeed] = useState("")
+  let [pokemonType, setPokemonType] = useState("")
+  let [pokemonSecondType, setPokemonSecondType] = useState("")
+   
 
-    const inputHandler = (event) => {
-      const input = document.getElementById("input")
+  const inputHandler = (event) => {
+    const input = document.getElementById("input")
       if(event.keyCode === 13){
-        setPokemonSearchName(input.value)
+        if(input.value !== pokemonSearchName){
+          P.getPokemonByName((input.value).toString().toLowerCase())
+          .then(function(response){
+            console.log(response)
+            setPokemonSearchName(input.value)
+            setPokemonImage(response.sprites.front_default)
+            setPokemonName(response.name)
+            setPokemonHp(response.stats[0].base_stat)
+            setPokemonAttack(response.stats[1].base_stat)
+            setPokemonDefense(response.stats[2].base_stat)
+            setPokemonSpeed(response.stats[5].base_stat)
+            setPokemonType(response.types[0].type.name)
+              if(response.types[1] !== undefined){
+                setPokemonSecondType(response.types[1].type.name)
+              }
+            })
+          .catch(function(error){
+            console.log(`There was an error:` , error)
+          })
+        }
       }
-    } 
-    
-    P.getPokemonByName((pokemonSearchName).toString().toLowerCase())
-    .then(function(response){
-      console.log(response)
-      setPokemonImage(response.sprites.front_default)
-      setPokemonName(response.name)
-      setPokemonHp(response.stats[0].base_stat)
-      setPokemonAttack(response.stats[1].base_stat)
-      setPokemonDefense(response.stats[2].base_stat)
-      setPokemonSpeed(response.stats[5].base_stat)
-      setPokemonType(response.types[0].type.name)
-      if(response.types[1].type.name){
-        setPokemonSecondType(response.types[1].type.name)
-      }
-    })
-    .catch(function(error){
-      console.log(`There was an error:` , error)
-    })
+   }    
 
     return(
         <>        
