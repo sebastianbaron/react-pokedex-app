@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import P from "../api/pokeApi"
 import "../style/main.css"
 import capitalize from "../utils/capitalize"
@@ -41,15 +41,6 @@ const PokemonSearch = (props) => {
     .catch(function(error){
       console.log(`There was an error:` , error)
     })
-
-    /* useEffect(() => {
-      const input = document.getElementById("input")
-      input.addEventListener("keydown", function(event){
-        if(event.keycode === 13){
-          inputHandler(input.value)
-        }
-      })
-    },[]) */
 
     return(
         <>        
