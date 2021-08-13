@@ -22,8 +22,6 @@ const PokemonSearch = (props) => {
       }
     } 
     
-    
-
     P.getPokemonByName((pokemonSearchName).toString().toLowerCase())
     .then(function(response){
       console.log(response)

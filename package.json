@@ -7,7 +7,6 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
-    "express": "^4.17.1",
     "pokeapi-js-wrapper": "^1.2.0",
     "pokedex-promise-v2": "^3.3.2",
     "postcss-cli": "^8.3.1",
