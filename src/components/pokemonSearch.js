@@ -24,12 +24,31 @@ const PokemonSearch = (props) => {
     setPokemonType,
     pokemonSecondType,
     setPokemonSecondType,
+    pokemonAbility,
+    setPokemonAbility,
+    pokemonSecondAbility,
+    setPokemonSecondAbility
   } = props;
+
+  const clearData = () => {
+    setPokemonImage("")
+    setPokemonName("")
+    setPokemonHp("")
+    setPokemonAttack("")
+    setPokemonDefense("")
+    setPokemonSpeed("")
+    setPokemonType("")
+    setPokemonAbility("")
+    setPokemonSecondAbility("")
+    setPokemonSecondType("")
+
+  }
 
   const setter = (id) => {
     if(id !== pokemonSearchName){
       P.getPokemonByName((id).toString().toLowerCase())
       .then(function(response){
+        clearData()
         console.log(response)
         setPokemonSearchName(id)
         setPokemonImage(response.sprites.front_default)
@@ -39,6 +58,8 @@ const PokemonSearch = (props) => {
         setPokemonDefense(response.stats[2].base_stat)
         setPokemonSpeed(response.stats[5].base_stat)
         setPokemonType(response.types[0].type.name)
+        setPokemonAbility(response.abilities[0].ability.name)
+        setPokemonSecondAbility(response.abilities[1].ability.name)
           if(response.types[1] !== undefined){
             setPokemonSecondType("/ " + capitalize(response.types[1].type.name))
           }
@@ -48,6 +69,8 @@ const PokemonSearch = (props) => {
       })
     }
   }
+
+
 
   const inputHandler = (event) => {
     const input = document.getElementById("input")
@@ -77,8 +100,8 @@ const PokemonSearch = (props) => {
               </div>
                 <div className="flex flex-col text-center md:text-left">
                 <div className="font-medium text-lg text-gray-800">Abilities</div>
-                <div className="text-gray-500 mb-3 whitespace-nowrap">{capitalize(pokemonType)}</div>
-                <div className="text-gray-500 mb-3 whitespace-nowrap">{capitalize(pokemonSecondType)}</div>
+                <div className="text-gray-500 mb-3 whitespace-nowrap">{capitalize(pokemonAbility)}</div>
+                <div className="text-gray-500 mb-3 whitespace-nowrap">{capitalize(pokemonSecondAbility)}</div>
                 <div className="font-medium text-lg text-gray-800">Stats</div>
                 <div className="text-gray-500 mb-2 whitespace-nowrap">Health: {pokemonHp}</div>
                 <div className="text-gray-500 mb-2 whitespace-nowrap">Attack: {pokemonAttack}</div>
@@ -88,7 +111,7 @@ const PokemonSearch = (props) => {
             </div>
             </div>
             </div>
-            <button className="mt-3 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" id="random" onClick={(event)=>inputHandler(event)}>Random Pokemon</button>
+            <button className="shadow-md mt-3 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" id="random" onClick={(event)=>inputHandler(event)}>Random Pokemon</button>
         </div>
         </>
     )
@@ -106,7 +129,7 @@ const PokemonSearch = (props) => {
             </div>
             </div>
             </div>
-            <button className="mt-3 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" id="random" onClick={(event)=>inputHandler(event)}>Random Pokemon</button>
+            <button className="shadow-md mt-3 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" id="random" onClick={(event)=>inputHandler(event)}>Random Pokemon</button>
         </div>
       </>
     )

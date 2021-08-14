@@ -15,6 +15,8 @@ function App() {
   let [pokemonSpeed, setPokemonSpeed] = useState("")
   let [pokemonType, setPokemonType] = useState("")
   let [pokemonSecondType, setPokemonSecondType] = useState("")
+  let [pokemonAbility, setPokemonAbility] = useState("")
+  let [pokemonSecondAbility, setPokemonSecondAbility] = useState("")
 
 
   return (
@@ -40,6 +42,10 @@ function App() {
     setPokemonType={setPokemonType}
     pokemonSecondType={pokemonSecondType}
     setPokemonSecondType={setPokemonSecondType} 
+    pokemonAbility={pokemonAbility}
+    setPokemonAbility={setPokemonAbility}
+    pokemonSecondAbility={pokemonSecondAbility}
+    setPokemonSecondAbility={setPokemonSecondAbility}
     />
     {/* <GetRandomPokemon 
     pokemonSearchName={pokemonSearchName} 
