@@ -8,61 +8,17 @@ const PokemonSearch = (props) => {
   let {
     pokemonSearchName,
     setPokemonSearchName,
-    pokemonImage,
-    setPokemonImage,
-    pokemonName,
-    setPokemonName,
-    pokemonHp,
-    setPokemonHp,
-    pokemonAttack,
-    setPokemonAttack,
-    pokemonDefense,
-    setPokemonDefense,
-    pokemonSpeed,
-    setPokemonSpeed,
-    pokemonType,
-    setPokemonType,
-    pokemonSecondType,
-    setPokemonSecondType,
-    pokemonAbility,
-    setPokemonAbility,
-    pokemonSecondAbility,
-    setPokemonSecondAbility
+    pokemonFullData,
+    setPokemonFullData,
   } = props;
-
-  const clearData = () => {
-    setPokemonImage("")
-    setPokemonName("")
-    setPokemonHp("")
-    setPokemonAttack("")
-    setPokemonDefense("")
-    setPokemonSpeed("")
-    setPokemonType("")
-    setPokemonAbility("")
-    setPokemonSecondAbility("")
-    setPokemonSecondType("")
-
-  }
 
   const setter = (id) => {
     if(id !== pokemonSearchName){
       P.getPokemonByName((id).toString().toLowerCase())
       .then(function(response){
-        clearData()
+        setPokemonFullData(response)
         console.log(response)
         setPokemonSearchName(id)
-        setPokemonImage(response.sprites.front_default)
-        setPokemonName(response.name)
-        setPokemonHp(response.stats[0].base_stat)
-        setPokemonAttack(response.stats[1].base_stat)
-        setPokemonDefense(response.stats[2].base_stat)
-        setPokemonSpeed(response.stats[5].base_stat)
-        setPokemonType(response.types[0].type.name)
-        setPokemonAbility(response.abilities[0].ability.name)
-        setPokemonSecondAbility(response.abilities[1].ability.name)
-          if(response.types[1] !== undefined){
-            setPokemonSecondType("/ " + capitalize(response.types[1].type.name))
-          }
         })
       .catch(function(error){
         console.log(`There was an error:` , error)
@@ -70,6 +26,25 @@ const PokemonSearch = (props) => {
     }
   }
 
+  const secondType = () => {
+    if(pokemonFullData.types[1] !== undefined){
+      let secondTypeValue = pokemonFullData.types[1].type.name
+      return(secondTypeValue)
+    }else{
+      let secondTypeValue = ""
+      return(secondTypeValue)
+    }  
+  }
+
+  const secondAbility = () => {
+    if(pokemonFullData.abilities[1] !== undefined){
+      let secondAbilityValue = pokemonFullData.abilities[1].ability.name
+      return(secondAbilityValue)
+    }else{
+      let secondTypeValue = ""
+      return(secondTypeValue)
+    }
+  }
 
 
   const inputHandler = (event) => {
@@ -92,21 +67,21 @@ const PokemonSearch = (props) => {
             <div className="flex flex-col bg-gray-200 max-w-screen shadow-md py-8 px-10 md:px-8 rounded-md">
             <div className="flex flex-col md:flex-row gap-6 md:gap-8">
               <div className="m-auto">
-                <img className="rounded-full border-4 border-gray-300 h-24 w-24 mx-auto" src={pokemonImage} alt="" />
-                <div className="font-medium text-lg text-gray-800 text-center mt-3">{capitalize(pokemonName)}</div>
-                <div className="text-gray-500 mb-3 whitespace-nowrap text-center mt-3">Type: {capitalize(pokemonType)} {pokemonSecondType}</div>
+                <img className="rounded-full border-4 border-gray-300 h-24 w-24 mx-auto" src={pokemonFullData.sprites.front_default} alt="" />
+                <div className="font-medium text-lg text-gray-800 text-center mt-3">{capitalize(pokemonFullData.name)}</div>
+                <div className="text-gray-500 mb-3 whitespace-nowrap text-center mt-3">Type: {capitalize(pokemonFullData.types[0].type.name)} {capitalize(secondType())}</div>
                 <div className="text-gray-500 mb-3 whitespace-nowrap text-center"></div>
 
               </div>
                 <div className="m-auto flex flex-col text-center md:text-left">
                 <div className="font-medium text-lg text-gray-800">Abilities</div>
-                <div className="text-gray-500 mb-3 whitespace-nowrap">{capitalize(pokemonAbility)}</div>
-                <div className="text-gray-500 mb-3 whitespace-nowrap">{capitalize(pokemonSecondAbility)}</div>
+                <div className="text-gray-500 mb-3 whitespace-nowrap">{capitalize(pokemonFullData.abilities[0].ability.name)}</div>
+                <div className="text-gray-500 mb-3 whitespace-nowrap">{capitalize(secondAbility())}</div>
                 <div className="font-medium text-lg text-gray-800">Stats</div>
-                <div className="text-gray-500 mb-2 whitespace-nowrap">Health: {pokemonHp}</div>
-                <div className="text-gray-500 mb-2 whitespace-nowrap">Attack: {pokemonAttack}</div>
-                <div className="text-gray-500 mb-2 whitespace-nowrap">Defense: {pokemonDefense}</div>
-                <div className="text-gray-500 mb-2 whitespace-nowrap">Speed: {pokemonSpeed}</div>
+                <div className="text-gray-500 mb-2 whitespace-nowrap">Health: {pokemonFullData.stats[0].base_stat}</div>
+                <div className="text-gray-500 mb-2 whitespace-nowrap">Attack: {pokemonFullData.stats[1].base_stat}</div>
+                <div className="text-gray-500 mb-2 whitespace-nowrap">Defense: {pokemonFullData.stats[2].base_stat}</div>
+                <div className="text-gray-500 mb-2 whitespace-nowrap">Speed: {pokemonFullData.stats[5].base_stat}</div>
                 </div>
             </div>
             </div>
