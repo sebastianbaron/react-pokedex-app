@@ -91,14 +91,14 @@ const PokemonSearch = (props) => {
             </div> 
             <div className="flex flex-col bg-gray-200 max-w-screen shadow-md py-8 px-10 md:px-8 rounded-md">
             <div className="flex flex-col md:flex-row gap-6 md:gap-8">
-              <div>
+              <div className="m-auto">
                 <img className="rounded-full border-4 border-gray-300 h-24 w-24 mx-auto" src={pokemonImage} alt="" />
                 <div className="font-medium text-lg text-gray-800 text-center mt-3">{capitalize(pokemonName)}</div>
                 <div className="text-gray-500 mb-3 whitespace-nowrap text-center mt-3">Type: {capitalize(pokemonType)} {pokemonSecondType}</div>
                 <div className="text-gray-500 mb-3 whitespace-nowrap text-center"></div>
 
               </div>
-                <div className="flex flex-col text-center md:text-left">
+                <div className="m-auto flex flex-col text-center md:text-left">
                 <div className="font-medium text-lg text-gray-800">Abilities</div>
                 <div className="text-gray-500 mb-3 whitespace-nowrap">{capitalize(pokemonAbility)}</div>
                 <div className="text-gray-500 mb-3 whitespace-nowrap">{capitalize(pokemonSecondAbility)}</div>
