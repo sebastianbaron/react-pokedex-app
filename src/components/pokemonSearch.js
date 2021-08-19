@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import P from "../api/pokeApi"
 import "../style/main.css"
 import capitalize from "../utils/capitalize"
+import { Link } from "react-router-dom"
 
 const PokemonSearch = (props) => {
 
@@ -26,26 +27,15 @@ const PokemonSearch = (props) => {
     }
   }
 
-  const secondType = () => {
-    if(pokemonFullData.types[1] !== undefined){
-      let secondTypeValue = pokemonFullData.types[1].type.name
-      return(secondTypeValue)
-    }else{
-      let secondTypeValue = ""
-      return(secondTypeValue)
-    }  
-  }
-
-  const secondAbility = () => {
-    if(pokemonFullData.abilities[1] !== undefined){
-      let secondAbilityValue = pokemonFullData.abilities[1].ability.name
-      return(secondAbilityValue)
-    }else{
-      let secondTypeValue = ""
-      return(secondTypeValue)
+  const PokemonIterator = (props) =>{
+    let { ability } = props;
+    
+        return(
+            <div className="text-gray-500 mb-2 whitespace-nowrap">
+                <h2>{ability}</h2>     
+            </div>
+        )
     }
-  }
-
 
   const inputHandler = (event) => {
     const input = document.getElementById("input")
@@ -56,7 +46,15 @@ const PokemonSearch = (props) => {
         setter(input.value)
       }
    }    
-    if(pokemonSearchName !== ""){
+
+   useEffect(() => {
+     if(pokemonFullData !== ""){
+     window.localStorage.setItem("pokemonFullData", JSON.stringify(pokemonFullData))}    
+   }, [pokemonFullData])
+
+   let LocalStoragePokemonData = JSON.parse(localStorage.getItem("pokemonFullData"))
+   
+    if(LocalStoragePokemonData !== undefined){
     return(
         <>        
         <div className="m-auto">
@@ -65,28 +63,31 @@ const PokemonSearch = (props) => {
               <div className="absolute top-4 right-3"> <i className="fa fa-search text-gray-400 z-20 hover:text-gray-500"></i> </div>
             </div> 
             <div className="flex flex-col bg-gray-200 max-w-screen shadow-md py-8 px-10 md:px-8 rounded-md">
-            <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+            <div className="flex flex-row gap-6">
               <div className="m-auto">
-                <img className="rounded-full border-4 border-gray-300 h-24 w-24 mx-auto" src={pokemonFullData.sprites.front_default} alt="" />
-                <div className="font-medium text-lg text-gray-800 text-center mt-3">{capitalize(pokemonFullData.name)}</div>
-                <div className="text-gray-500 mb-3 whitespace-nowrap text-center mt-3">Type: {capitalize(pokemonFullData.types[0].type.name)} {capitalize(secondType())}</div>
-                <div className="text-gray-500 mb-3 whitespace-nowrap text-center"></div>
-
-              </div>
-                <div className="m-auto flex flex-col text-center md:text-left">
-                <div className="font-medium text-lg text-gray-800">Abilities</div>
-                <div className="text-gray-500 mb-3 whitespace-nowrap">{capitalize(pokemonFullData.abilities[0].ability.name)}</div>
-                <div className="text-gray-500 mb-3 whitespace-nowrap">{capitalize(secondAbility())}</div>
-                <div className="font-medium text-lg text-gray-800">Stats</div>
-                <div className="text-gray-500 mb-2 whitespace-nowrap">Health: {pokemonFullData.stats[0].base_stat}</div>
-                <div className="text-gray-500 mb-2 whitespace-nowrap">Attack: {pokemonFullData.stats[1].base_stat}</div>
-                <div className="text-gray-500 mb-2 whitespace-nowrap">Defense: {pokemonFullData.stats[2].base_stat}</div>
-                <div className="text-gray-500 mb-2 whitespace-nowrap">Speed: {pokemonFullData.stats[5].base_stat}</div>
+                <img className="rounded-full border-4 border-gray-300 h-24 w-24 mx-auto" src={LocalStoragePokemonData.sprites.front_default} alt="" />
+                <div className="font-medium text-xl text-gray-800 text-center mt-3">{capitalize(LocalStoragePokemonData.name)}</div>
+                <h1 className="font-medium text-lg mt-3 text-gray-800 text-center">Types</h1>
+                <div className="text-center mt-4">
+                {LocalStoragePokemonData.types && LocalStoragePokemonData.types.map((types) => <PokemonIterator key={types.index} ability={types.type.name}/>)}
+                </div>
+               </div>
+                <div className="m-auto flex flex-col text-left">
+                <h1 className="font-medium text-lg text-gray-800">Abilities</h1>
+                {LocalStoragePokemonData.abilities && LocalStoragePokemonData.abilities.map((abilities) => <PokemonIterator key={abilities.index} ability={abilities.ability.name}/>)}
+                <h1 className="font-medium text-lg text-gray-800">Stats</h1>
+                  <div className="text-gray-500 mb-2 whitespace-nowrap">Health: {LocalStoragePokemonData.stats[0].base_stat}</div>
+                  <div className="text-gray-500 mb-2 whitespace-nowrap">Attack: {LocalStoragePokemonData.stats[1].base_stat}</div>
+                  <div className="text-gray-500 mb-2 whitespace-nowrap">Defense: {LocalStoragePokemonData.stats[2].base_stat}</div>
+                  <div className="text-gray-500 mb-2 whitespace-nowrap">Speed: {LocalStoragePokemonData.stats[5].base_stat}</div>
                 </div>
             </div>
             </div>
             </div>
+            <div className="flex flex-row justify-between">
             <button className="shadow-md mt-3 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" id="random" onClick={(event)=>inputHandler(event)}>Random Pokemon</button>
+            <Link to="/List" className="shadow-md mt-3 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">Full List</Link>
+            </div>
         </div>
         </>
     )
@@ -104,7 +105,10 @@ const PokemonSearch = (props) => {
             </div>
             </div>
             </div>
+            <div className="flex flex-row justify-between">
             <button className="shadow-md mt-3 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" id="random" onClick={(event)=>inputHandler(event)}>Random Pokemon</button>
+            <Link to="/info" className="shadow-md mt-3 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">Full List</Link>
+            </div>
         </div>
       </>
     )
